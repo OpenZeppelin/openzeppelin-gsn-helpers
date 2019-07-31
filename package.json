@@ -1,0 +1,28 @@
+{
+  "name": "@openzeppelin/gsn-helpers",
+  "version": "0.1.0",
+  "description": "Test and development helper methods and scripts for GSN",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenZeppelin/openzeppelin-gsn-helpers.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OpenZeppelin/openzeppelin-gsn-helpers/issues"
+  },
+  "homepage": "https://github.com/OpenZeppelin/openzeppelin-gsn-helpers#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "chai": "^4.2.0",
+    "commander": "^2.20.0",
+    "lodash": "^4.17.15",
+    "openzeppelin-test-helpers": "^0.4.1",
+    "sleep-promise": "^8.0.1",
+    "web3": "^1.2.0"
+  }
+}
