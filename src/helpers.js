@@ -21,8 +21,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
     const relayAddress = response.data.RelayServerAddress;
 
     const relayHub = new web3.eth.Contract(relayHubInterface, relayHubAddress);
-    console.log(unstakeDelay)
-    console.log(unstakeDelay.toString())
+
     await relayHub.methods.stake(relayAddress, unstakeDelay.toString()).send({ value: stake, from });
 
     await send.ether(from, relayAddress, funds);
