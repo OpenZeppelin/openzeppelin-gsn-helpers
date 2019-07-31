@@ -20,7 +20,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
     const response = await axios.get(`${relayUrl}/getaddr`);
     const relayAddress = response.data.RelayServerAddress;
 
-    const relayHub = relayHubContract(relayHubAddress);
+    const relayHub = new web3.eth.Contract(data.relayHub.abi, relayHubAddress);
 
     await relayHub.methods.stake(relayAddress, unstakeDelay.toString()).send({ value: stake, from });
 
@@ -37,7 +37,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
 
 async function deployRelayHub(web3, from) {
   if ((await web3.eth.getCode(data.relayHub.address)).length > '0x0'.length) {
-    return relayHubContract();
+    return data.relayHub.address;
   }
 
   console.log(`Deploying singleton RelayHub instance`);
@@ -47,20 +47,16 @@ async function deployRelayHub(web3, from) {
 
   console.log(`RelayHub deployed!`);
 
-  return relayHubContract();
+  return data.relayHub.address;
 }
 
 async function fundRecipient(web3, recipient, amount, from) {
-  const relayHub = relayHubContract();
+  const relayHub = new web3.eth.Contract(data.relayHub.abi, data.relayHub.address);
 
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
   if (currentBalance.lte(amount)) {
     await relayHub.methods.depositFor(recipient).send({ value: amount.sub(currentBalance), from });
   }
-}
-
-function relayHubContract(address = data.relayHub.address) {
-  return new web3.eth.Contract(data.relayHub.abi, address);
 }
 
 async function defaultFromAccount(web3) {
