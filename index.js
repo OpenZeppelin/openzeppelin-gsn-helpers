@@ -4,5 +4,6 @@ const program = require('commander');
 
 program
   .version(require('./package.json').version)
-  .command('register-relayer [name]', 'stake for a relayer and fund it')
+  .command('deploy-relay-hub', 'deploy the singleton RelayHub instance')
+  .command('register-relayer', 'stake for a relayer and fund it')
   .parse(process.argv);
