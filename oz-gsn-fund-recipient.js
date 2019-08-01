@@ -16,4 +16,4 @@ const web3 = new Web3(nodeURL);
 require('openzeppelin-test-helpers/configure')({ web3 });
 
 const { fundRecipient } = require('./src/helpers');
-fundRecipient(web3, lodash.pick(program, ['from']));
+fundRecipient(web3, lodash.pick(program, ['from', 'recipient', 'amount']));
