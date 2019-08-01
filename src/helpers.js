@@ -134,4 +134,6 @@ module.exports = {
 
     await fundRecipient(web3, options.recipient, options.amount, options.from);
   },
+
+  relayHubAddress: data.address
 };
