@@ -11,7 +11,5 @@ const nodeURL = program.ethereumNodeURL !== undefined ? program.ethereumNodeURL 
 const Web3 = require('web3');
 const web3 = new Web3(nodeURL);
 
-require('openzeppelin-test-helpers/configure')({ web3 });
-
 const { deployRelayHub } = require('./src/helpers');
 deployRelayHub(web3, lodash.pick(program, ['from']));
