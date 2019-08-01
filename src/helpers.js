@@ -1,4 +1,4 @@
-const { ether, send, singletons, time } = require('openzeppelin-test-helpers');
+const { ether, send, time } = require('openzeppelin-test-helpers');
 
 const data = require('./data');
 
@@ -15,7 +15,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
   }
 
   try {
-    console.log(`Funding GSN relay at ${relayUrl}`);
+    console.error(`Funding GSN relay at ${relayUrl}`);
 
     const response = await axios.get(`${relayUrl}/getaddr`);
     const relayAddress = response.data.RelayServerAddress;
@@ -28,7 +28,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
 
     await waitForRelay(relayUrl);
 
-    console.log(`Relay is funded and ready!`);
+    console.error(`Relay is funded and ready!`);
 
   } catch (error) {
     throw Error(`Failed to fund relay: '${error}'`);
@@ -40,12 +40,13 @@ async function deployRelayHub(web3, from) {
     return data.relayHub.address;
   }
 
-  console.log(`Deploying singleton RelayHub instance`);
+  console.error(`Deploying singleton RelayHub instance`);
   await send.ether(from, data.relayHub.deploy.deployer , ether(data.relayHub.deploy.fundsEther));
 
   await web3.eth.sendSignedTransaction(data.relayHub.deploy.tx);
 
-  console.log(`RelayHub deployed!`);
+  console.error(`RelayHub deployed!`);
+  console.log(data.relayHub.address);
 
   return data.relayHub.address;
 }
@@ -75,7 +76,7 @@ async function defaultFromAccount(web3) {
 
 async function waitForRelay(relayUrl) {
   const timeout = 30;
-  console.log(`Will wait up to ${timeout}s for the relay to be ready`);
+  console.error(`Will wait up to ${timeout}s for the relay to be ready`);
 
   for (let i = 0; i < timeout; ++i) {
     await sleep(1000);
