@@ -1,9 +1,12 @@
-const { ether, send, time } = require('openzeppelin-test-helpers');
-
 const data = require('./data');
 
 const axios = require('axios');
 const sleep = require('sleep-promise');
+const utils = require('web3').utils;
+
+const ether = function(value) {
+  return new utils.BN(utils.toWei(value, 'ether'));
+}
 
 async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDelay, funds, from) {
   try {
@@ -24,7 +27,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
 
     await relayHub.methods.stake(relayAddress, unstakeDelay.toString()).send({ value: stake, from });
 
-    await send.ether(from, relayAddress, funds);
+    await web3.eth.sendTransaction({ from, to: relayAddress, value: funds });
 
     await waitForRelay(relayUrl);
 
@@ -41,7 +44,7 @@ async function deployRelayHub(web3, from) {
   }
 
   console.error(`Deploying singleton RelayHub instance`);
-  await send.ether(from, data.relayHub.deploy.deployer , ether(data.relayHub.deploy.fundsEther));
+  await web3.eth.sendTransaction({ from, to: data.relayHub.deploy.deployer, value: ether(data.relayHub.deploy.fundsEther) });
 
   await web3.eth.sendSignedTransaction(data.relayHub.deploy.tx);
 
@@ -52,6 +55,7 @@ async function deployRelayHub(web3, from) {
 }
 
 async function fundRecipient(web3, recipient, amount, from) {
+  if (!recipient) throw new Error('Recipient to be funded not set');
   const relayHub = new web3.eth.Contract(data.relayHub.abi, data.relayHub.address);
 
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
@@ -100,7 +104,7 @@ module.exports = {
       relayUrl: 'http://localhost:8090',
       relayHubAddress: data.relayHub.address,
       stake: ether('1'),
-      unstakeDelay: time.duration.weeks(1),
+      unstakeDelay: 604800, // 1 week
       funds: ether('5'),
       from: await defaultFromAccount(web3), // We could skip this if from is supplied
     };
