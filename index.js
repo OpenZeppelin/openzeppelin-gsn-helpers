@@ -1,9 +1,9 @@
 const { registerRelay, deployRelayHub, fundRecipient} = require('./src/helpers');
-const expectGSNError = require('./src/expectGSNError');
+const expectError = require('./src/expectError');
 
 module.exports = {
   registerRelay,
   deployRelayHub,
   fundRecipient,
-  expectGSNError,
+  expectError,
 };

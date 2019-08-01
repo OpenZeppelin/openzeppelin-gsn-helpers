@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const expectGSNError = async function (promise) {
+const expectError = async function (promise) {
   try {
     await promise;
   } catch (error) {
@@ -10,4 +10,4 @@ const expectGSNError = async function (promise) {
   expect.fail('Expected a GSN exception but none was received');
 };
 
-module.exports = expectGSNError;
+module.exports = expectError;
