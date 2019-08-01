@@ -1,13 +1,14 @@
 {
   "name": "@openzeppelin/gsn-helpers",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Test and development helper methods and scripts for GSN",
   "main": "index.js",
   "bin": {
     "oz-gsn": "oz-gsn.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "./scripts/release.sh"
   },
   "repository": {
     "type": "git",
