@@ -28,5 +28,8 @@
     "openzeppelin-test-helpers": "^0.4.1",
     "sleep-promise": "^8.0.1",
     "web3": "^1.2.0"
+  },
+  "peerDependencies": {
+    "chai": "^4.2.0"
   }
 }
