@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/gsn-helpers",
-  "version": "0.0.0",
+  "version": "0.1.0-rc.2",
   "description": "Test and development helper methods and scripts for GSN",
   "main": "index.js",
   "bin": {
@@ -27,5 +27,8 @@
     "lodash": "^4.17.15",
     "sleep-promise": "^8.0.1",
     "web3": "^1.2.0"
+  },
+  "peerDependencies": {
+    "chai": "^4.2.0"
   }
 }
