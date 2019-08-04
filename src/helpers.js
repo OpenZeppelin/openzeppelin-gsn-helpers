@@ -57,10 +57,11 @@ async function deployRelayHub(web3, from) {
 async function fundRecipient(web3, recipient, amount, from) {
   if (!recipient) throw new Error('Recipient to be funded not set');
   const relayHub = new web3.eth.Contract(data.relayHub.abi, data.relayHub.address);
-
+  
+  const targetAmount = new web3.utils.BN(amount);
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
-  if (currentBalance.lte(amount)) {
-    await relayHub.methods.depositFor(recipient).send({ value: amount.sub(currentBalance), from });
+  if (currentBalance.lte(targetAmount)) {
+    await relayHub.methods.depositFor(recipient).send({ value: targetAmount.sub(currentBalance), from });
   }
 }
 
