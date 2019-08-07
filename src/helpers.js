@@ -54,9 +54,13 @@ async function deployRelayHub(web3, from) {
   return data.relayHub.address;
 }
 
-async function fundRecipient(web3, recipient, amount, from) {
+async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
   if (!recipient) throw new Error('Recipient to be funded not set');
-  const relayHub = new web3.eth.Contract(data.relayHub.abi, data.relayHub.address);
+  if (typeof(recipient) !== 'string') {
+    if (recipient.address) recipient = recipient.address;
+    else if (recipient.options && recipient.options.address) recipient = recipient.options.address;
+  }
+  const relayHub = new web3.eth.Contract(data.relayHub.abi, relayHubAddress);
   
   const targetAmount = new web3.utils.BN(amount);
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
@@ -65,7 +69,8 @@ async function fundRecipient(web3, recipient, amount, from) {
   }
 }
 
-async function defaultFromAccount(web3) {
+async function defaultFromAccount(web3, from = null) {
+  if (from) return from;
   const requiredBalance = ether('10');
 
   const accounts = await web3.eth.getAccounts();
@@ -107,7 +112,7 @@ module.exports = {
       stake: ether('1'),
       unstakeDelay: 604800, // 1 week
       funds: ether('5'),
-      from: await defaultFromAccount(web3), // We could skip this if from is supplied
+      from: await defaultFromAccount(web3, options && options.from),
     };
 
     options = { ...defaultOptions, ... options};
@@ -117,7 +122,7 @@ module.exports = {
 
   deployRelayHub: async function (web3, options = {}) {
     const defaultOptions = {
-      from: await defaultFromAccount(web3), // We could skip this if from is supplied
+      from: await defaultFromAccount(web3, options && options.from),
     };
 
     options = { ...defaultOptions, ... options};
@@ -128,13 +133,16 @@ module.exports = {
   fundRecipient: async function (web3, options = {}) {
     const defaultOptions = {
       amount: ether('1'),
-      from: await defaultFromAccount(web3), // We could skip this if from is supplied
+      from: await defaultFromAccount(web3, options && options.from),
+      relayHubAddress: data.relayHub.address
     };
 
     options = { ...defaultOptions, ... options};
 
-    await fundRecipient(web3, options.recipient, options.amount, options.from);
+    await fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
   },
 
-  relayHubAddress: data.relayHub.address
+  getRelayHub: function (web3, options = {}) {
+    return new web3.eth.Contract(data.relayHub.abi, data.relayHub.address, { data: data.relayHub.bytecode, ... options });
+  }
 };
