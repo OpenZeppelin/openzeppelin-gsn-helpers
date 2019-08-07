@@ -42,7 +42,8 @@ await registerRelay(web3, {
 await fundRecipient(web3, {
   recipient: RECIPIENT_ADDRESS, // required
   amount: ether('1'),
-  from: accounts[0]
+  from: accounts[0],
+  relayHubAddress: '0xd216153c06e857cd7f72665e0af1d7d82172f494'
 });
 ```
 
