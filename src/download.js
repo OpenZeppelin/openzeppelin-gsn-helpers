@@ -1,5 +1,5 @@
 const process = require('process');
-const homedir = require('os').homedir();
+const envPaths = require('env-paths');
 const { createWriteStream, chmodSync } = require('fs');
 const { pathExists, ensureDir } = require('fs-extra');
 const { dirname } = require('path');
@@ -8,7 +8,7 @@ const axios = require('axios');
 const REPOSITORY = 'OpenZeppelin/openzeppelin-gsn-helpers';
 const VERSION = 'v0.1.4';
 const BINARY = 'gsn-relay';
-const PATH = `${homedir}/.gsn/${BINARY}-${VERSION}`;
+const PATH = `${envPaths('gsn').cache}/${BINARY}-${VERSION}`;
 
 async function ensureRelayer(path=PATH) {
   if (await hasRelayer(path)) return path;
