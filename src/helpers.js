@@ -3,6 +3,7 @@ const data = require('./data');
 const axios = require('axios');
 const sleep = require('sleep-promise');
 const utils = require('web3').utils;
+const { merge } = require('lodash');
 
 const ether = function(value) {
   return new utils.BN(utils.toWei(value, 'ether'));
@@ -40,6 +41,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
 
 async function deployRelayHub(web3, from) {
   if ((await web3.eth.getCode(data.relayHub.address)).length > '0x0'.length) {
+    console.error(`RelayHub already deployed at ${data.relayHub.address}`)
     return data.relayHub.address;
   }
 
@@ -48,8 +50,7 @@ async function deployRelayHub(web3, from) {
 
   await web3.eth.sendSignedTransaction(data.relayHub.deploy.tx);
 
-  console.error(`RelayHub deployed!`);
-  console.log(data.relayHub.address);
+  console.error(`RelayHub deployed at ${data.relayHub.address}`);
 
   return data.relayHub.address;
 }
@@ -115,7 +116,7 @@ module.exports = {
       from: await defaultFromAccount(web3, options && options.from),
     };
 
-    options = { ...defaultOptions, ... options};
+    options = merge(defaultOptions, options);
 
     await registerRelay(web3, options.relayUrl, options.relayHubAddress, options.stake, options.unstakeDelay, options.funds, options.from);
   },
@@ -125,9 +126,9 @@ module.exports = {
       from: await defaultFromAccount(web3, options && options.from),
     };
 
-    options = { ...defaultOptions, ... options};
+    options = merge(defaultOptions, options);
 
-    await deployRelayHub(web3, options.from);
+    return await deployRelayHub(web3, options.from);
   },
 
   fundRecipient: async function (web3, options = {}) {
@@ -137,7 +138,7 @@ module.exports = {
       relayHubAddress: data.relayHub.address
     };
 
-    options = { ...defaultOptions, ... options};
+    options = merge(defaultOptions, options);
 
     await fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
   },
