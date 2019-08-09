@@ -12,4 +12,5 @@ const Web3 = require('web3');
 const web3 = new Web3(nodeURL);
 
 const { deployRelayHub } = require('./src/helpers');
-deployRelayHub(web3, lodash.pick(program, ['from']));
+deployRelayHub(web3, lodash.pick(program, ['from']))
+  .then(address => console.log(address));
