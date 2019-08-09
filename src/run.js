@@ -41,16 +41,16 @@ async function runAndRegister(web3, opts={}) {
   }
 
   // Start running relayer and register it
-  const process = await runRelayer({ ...opts, relayHubAddress });
+  const subprocess = await runRelayer({ ...opts, relayHubAddress });
   await sleep(2000);
   try {
     await registerRelay(web3, { relayHubAddress, from, relayUrl: getUrl(opts) });
   } catch (err) {
-    process.kill();
+    subprocess.kill();
     throw err;
   }
 
-  return process;
+  return subprocess;
 }
 
 function getUrl({ relayUrl, port }) {
