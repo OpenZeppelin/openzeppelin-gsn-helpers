@@ -5,7 +5,7 @@ const process = require('process');
 program
   .option('-n, --ethereumNodeURL <url>', 'url to the local Ethereum node', 'http://localhost:8545')
   .option('--relayUrl <url>', 'url to advertise the relayer (defaults to localhost:8090)')
-  .option('-p, --port <port>', 'port to bind the relayer to (defaults to url port)')
+  .option('-p, --port <port>', 'port to bind the relayer to (defaults to port defined in url)')
   .option('--relayHubAddress <address>', 'address to the relay hub (deploys a new hub if not set)')
   .option('-f, --from <account>', 'account to send transactions from (defaults to first account with balance)')
   .option('--workdir <workdir>', 'working directory for relayer data (defaults to tmp dir)')
@@ -17,6 +17,10 @@ program
 
 const { runRelay, runAndRegister } = require('./src/run');
 const opts = lodash.pick(program, ['detach', 'workdir', 'ethereumNodeURL', 'relayUrl', 'port', 'relayHubAddress', 'from', 'devMode', 'quiet']);
+if (opts.port && opts.relayUrl) {
+  console.error(`Cannot set both port and relayUrl options. Please set only one.`);
+  process.exit(1);
+}
 
 if (program.register === false) {
   runRelay(opts);
