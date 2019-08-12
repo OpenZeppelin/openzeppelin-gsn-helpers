@@ -39,18 +39,18 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
   }
 }
 
-async function deployRelayHub(web3, from) {
+async function deployRelayHub(web3, from, verbose) {
   if ((await web3.eth.getCode(data.relayHub.address)).length > '0x0'.length) {
-    console.error(`RelayHub found at ${data.relayHub.address}`)
+    if (verbose) console.error(`RelayHub found at ${data.relayHub.address}`)
     return data.relayHub.address;
   }
 
-  console.error(`Deploying singleton RelayHub instance`);
+  if (verbose) console.error(`Deploying singleton RelayHub instance`);
   await web3.eth.sendTransaction({ from, to: data.relayHub.deploy.deployer, value: ether(data.relayHub.deploy.fundsEther) });
 
   await web3.eth.sendSignedTransaction(data.relayHub.deploy.tx);
 
-  console.error(`RelayHub deployed at ${data.relayHub.address}`);
+  if (verbose) console.error(`RelayHub deployed at ${data.relayHub.address}`);
 
   return data.relayHub.address;
 }
@@ -69,9 +69,9 @@ async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
   if (currentBalance.lt(targetAmount)) {
     const value = targetAmount.sub(currentBalance);
     await relayHub.methods.depositFor(recipient).send({ value, from });
-    console.error(`Deposited ${value.toString()} wei for ${recipient}`);
+    return targetAmount;
   } else {
-    console.error(`Recipient ${recipient} has ${currentBalance.toString()} wei`);
+    return currentBalance;
   }
 }
 
@@ -157,7 +157,7 @@ module.exports = {
 
     options = merge(defaultOptions, options);
 
-    return await deployRelayHub(web3, options.from);
+    return await deployRelayHub(web3, options.from, !!options.verbose);
   },
 
   fundRecipient: async function (web3, options = {}) {
@@ -169,7 +169,7 @@ module.exports = {
 
     options = merge(defaultOptions, options);
 
-    await fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
+    return fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
   },
 
   getRelayHub,

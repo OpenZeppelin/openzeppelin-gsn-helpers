@@ -14,4 +14,5 @@ const Web3 = require('web3');
 const web3 = new Web3(nodeURL);
 
 const { fundRecipient } = require('./src/helpers');
-fundRecipient(web3, lodash.pick(program, ['from', 'recipient', 'amount']));
+fundRecipient(web3, lodash.pick(program, ['from', 'recipient', 'amount']))
+  .then(balance => console.error(`Recipient ${program.recipient} balance is now ${balance.toString()} wei`));
