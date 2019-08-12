@@ -62,7 +62,7 @@ async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
   if (relayHubAddress.toLowerCase() === data.relayHub.address.toLowerCase()) {
     await deployRelayHub(web3, from);
   }
-  const relayHub = getRelayHub(web3);
+  const relayHub = getRelayHub(web3, relayHubAddress);
   
   const targetAmount = new web3.utils.BN(amount);
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
@@ -119,8 +119,8 @@ function getRecipientAddress(recipient) {
   return recipient;
 }
 
-function getRelayHub(web3, options = {}) {
-  return new web3.eth.Contract(data.relayHub.abi, data.relayHub.address, { data: data.relayHub.bytecode, ... options });
+function getRelayHub(web3, address, options = {}) {
+  return new web3.eth.Contract(data.relayHub.abi, address || data.relayHub.address, { data: data.relayHub.bytecode, ... options });
 }
 
 async function isRelayHubDeployed(web3) {
@@ -128,9 +128,9 @@ async function isRelayHubDeployed(web3) {
   return code.length > 2;
 }
 
-async function getRecipientFunds(web3, recipient) {
+async function getRecipientFunds(web3, recipient, relayHubAddress) {
   recipient = getRecipientAddress(recipient);
-  const relayHub = await getRelayHub(web3);
+  const relayHub = await getRelayHub(web3, relayHubAddress);
   return await relayHub.methods.balanceOf(recipient).call();
 }
 
