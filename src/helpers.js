@@ -41,7 +41,7 @@ async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDela
 
 async function deployRelayHub(web3, from) {
   if ((await web3.eth.getCode(data.relayHub.address)).length > '0x0'.length) {
-    console.error(`RelayHub already deployed at ${data.relayHub.address}`)
+    console.error(`RelayHub found at ${data.relayHub.address}`)
     return data.relayHub.address;
   }
 
@@ -56,17 +56,22 @@ async function deployRelayHub(web3, from) {
 }
 
 async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
-  if (!recipient) throw new Error('Recipient to be funded not set');
-  if (typeof(recipient) !== 'string') {
-    if (recipient.address) recipient = recipient.address;
-    else if (recipient.options && recipient.options.address) recipient = recipient.options.address;
+  recipient = getRecipientAddress(recipient)
+  
+  // Ensure relayHub is deployed on the local network
+  if (relayHubAddress.toLowerCase() === data.relayHub.address.toLowerCase()) {
+    await deployRelayHub(web3, from);
   }
-  const relayHub = new web3.eth.Contract(data.relayHub.abi, relayHubAddress);
+  const relayHub = getRelayHub(web3);
   
   const targetAmount = new web3.utils.BN(amount);
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
-  if (currentBalance.lte(targetAmount)) {
-    await relayHub.methods.depositFor(recipient).send({ value: targetAmount.sub(currentBalance), from });
+  if (currentBalance.lt(targetAmount)) {
+    const value = targetAmount.sub(currentBalance);
+    await relayHub.methods.depositFor(recipient).send({ value, from });
+    console.error(`Deposited ${value.toString()} wei for ${recipient}`);
+  } else {
+    console.error(`Recipient ${recipient} has ${currentBalance.toString()} wei`);
   }
 }
 
@@ -82,7 +87,7 @@ async function defaultFromAccount(web3, from = null) {
     }
   }
 
-  throw Error(`Found no accounts with sufficient balance (${requiredBalance} ETH)`);
+  throw Error(`Found no accounts with sufficient balance (${requiredBalance} wei)`);
 }
 
 async function waitForRelay(relayUrl) {
@@ -103,6 +108,30 @@ async function waitForRelay(relayUrl) {
 async function isRelayReady(relayUrl) {
   const response = await axios.get(`${relayUrl}/getaddr`);
   return response.data.Ready;
+}
+
+function getRecipientAddress(recipient) {
+  if (!recipient) throw new Error('Recipient address not set');
+  if (typeof(recipient) !== 'string') {
+    if (recipient.address) return recipient.address;
+    else if (recipient.options && recipient.options.address) return recipient.options.address;
+  }
+  return recipient;
+}
+
+function getRelayHub(web3, options = {}) {
+  return new web3.eth.Contract(data.relayHub.abi, data.relayHub.address, { data: data.relayHub.bytecode, ... options });
+}
+
+async function isRelayHubDeployed(web3) {
+  const code = await web3.eth.getCode(data.relayHub.address);
+  return code.length > 2;
+}
+
+async function getRecipientFunds(web3, recipient) {
+  recipient = getRecipientAddress(recipient);
+  const relayHub = await getRelayHub(web3);
+  return await relayHub.methods.balanceOf(recipient).call();
 }
 
 module.exports = {
@@ -143,7 +172,9 @@ module.exports = {
     await fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
   },
 
-  getRelayHub: function (web3, options = {}) {
-    return new web3.eth.Contract(data.relayHub.abi, data.relayHub.address, { data: data.relayHub.bytecode, ... options });
-  }
+  getRelayHub,
+
+  isRelayHubDeployed,
+
+  getRecipientFunds
 };
