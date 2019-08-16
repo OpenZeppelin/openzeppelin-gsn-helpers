@@ -15,7 +15,7 @@ program
   .option('--no-devMode', 'turns off dev mode in relayer')
   .parse(process.argv);
 
-const { runRelay, runAndRegister } = require('./src/run');
+const { runRelayer, runAndRegister } = require('./src/run');
 const opts = lodash.pick(program, ['detach', 'workdir', 'ethereumNodeURL', 'relayUrl', 'port', 'relayHubAddress', 'from', 'devMode', 'quiet']);
 if (opts.port && opts.relayUrl) {
   console.error(`Cannot set both port and relayUrl options. Please set only one.`);
@@ -23,7 +23,7 @@ if (opts.port && opts.relayUrl) {
 }
 
 if (program.register === false) {
-  runRelay(opts);
+  runRelayer(opts);
   return;
 }
 
@@ -31,13 +31,13 @@ const Web3 = require('web3');
 const web3 = new Web3(program.ethereumNodeURL);
 
 web3.eth.getAccounts()
-  .then(async () => { 
+  .then(async () => {
     const subprocess = await runAndRegister(web3, opts);
     if (program.detach) {
       subprocess.unref();
       process.exit(0);
     }
   })
-  .catch(err => { 
-    console.error(`Could not connect to node at ${program.ethereumNodeURL} (${err}).`); 
+  .catch(err => {
+    console.error(`Could not connect to node at ${program.ethereumNodeURL} (${err}).`);
   });
