@@ -58,8 +58,7 @@ await deployRelayHub(web3, {
 // Download the platform-specific binary and run a relayer
 await runRelayer({
   relayUrl: 'http://localhost:8090',
-  relayHubAddress: '0xd216153c06e857cd7f72665e0af1d7d82172f494',
-  workdir: process.cwd(), // defaults to tmp dir
+  workdir: process.cwd(), // defaults to a tmp dir
   devMode: true,
   ethereumNodeURL: 'http://localhost:8545',
   gasPricePercent: 0,
@@ -70,7 +69,6 @@ await runRelayer({
 // Register a relayer in the hub, requires the relayer process to be running
 await registerRelay(web3, {
   relayUrl: 'http://localhost:8090',
-  relayHubAddress: '0xd216153c06e857cd7f72665e0af1d7d82172f494',
   stake: ether('1'), 
   unstakeDelay: 604800, // 1 week
   funds: ether('5'),
@@ -81,8 +79,7 @@ await registerRelay(web3, {
 await fundRecipient(web3, {
   recipient: RECIPIENT_ADDRESS, // required
   amount: ether('1'),
-  from: accounts[0],
-  relayHubAddress: '0xd216153c06e857cd7f72665e0af1d7d82172f494'
+  from: accounts[0]
 });
 ```
 
