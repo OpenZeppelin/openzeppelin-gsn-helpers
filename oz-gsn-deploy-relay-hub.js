@@ -2,8 +2,8 @@ const program = require('commander');
 const lodash = require('lodash');
 
 program
-  .option('--ethereumNodeURL <url>')
-  .option('--from <account>')
+  .option('-n, --ethereumNodeURL <url>', 'url to the local Ethereum node', 'http://localhost:8545')
+  .option('-f, --from <account>', 'account to send transactions from (defaults to first account with balance)')
   .parse(process.argv);
 
 const nodeURL = program.ethereumNodeURL !== undefined ? program.ethereumNodeURL : 'http://localhost:8545';

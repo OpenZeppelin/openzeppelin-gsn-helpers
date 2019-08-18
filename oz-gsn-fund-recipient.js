@@ -2,10 +2,10 @@ const program = require('commander');
 const lodash = require('lodash');
 
 program
-  .option('--ethereumNodeURL <url>')
-  .option('--recipient <address>')
-  .option('--amount <amount>')
-  .option('--from <account>')
+  .option('-n, --ethereumNodeURL <url>', 'url to the local Ethereum node', 'http://localhost:8545')
+  .option('--recipient <address>','address of the recipient contract')
+  .option('--amount <amount>', 'amount of funds to deposit for the recipient contract, in wei (defaults to 1 Ether)')
+  .option('-f, --from <account>', 'account to send transactions from (defaults to first account with balance)')
   .parse(process.argv);
 
 const nodeURL = program.ethereumNodeURL !== undefined ? program.ethereumNodeURL : 'http://localhost:8545';
