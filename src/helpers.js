@@ -9,26 +9,6 @@ const ether = function(value) {
   return new utils.BN(utils.toWei(value, 'ether'));
 }
 
-async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
-  recipient = getRecipientAddress(recipient)
-
-  // Ensure relayHub is deployed on the local network
-  if (relayHubAddress.toLowerCase() === data.relayHub.address.toLowerCase()) {
-    await deployRelayHub(web3, from);
-  }
-  const relayHub = getRelayHub(web3, relayHubAddress);
-
-  const targetAmount = new web3.utils.BN(amount);
-  const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
-  if (currentBalance.lt(targetAmount)) {
-    const value = targetAmount.sub(currentBalance);
-    await relayHub.methods.depositFor(recipient).send({ value, from });
-    return targetAmount;
-  } else {
-    return currentBalance;
-  }
-}
-
 async function defaultFromAccount(web3, from = null) {
   if (from) return from;
   const requiredBalance = ether('10');
@@ -93,29 +73,12 @@ async function getRecipientFunds(web3, recipient, relayHubAddress) {
 }
 
 module.exports = {
-  fundRecipient: async function (web3, options = {}) {
-    const defaultOptions = {
-      amount: ether('1'),
-      from: await defaultFromAccount(web3, options && options.from),
-      relayHubAddress: data.relayHub.address
-    };
-
-    options = merge(defaultOptions, options);
-
-    return fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
-  },
-
-  ether,
-
-  waitForRelay,
-
   defaultFromAccount,
-
+  ether,
+  getRecipientAddress,
+  getRecipientFunds,
   getRelayHub,
-
   isRelayHubDeployed,
-
   isRelayReady,
-
-  getRecipientFunds
+  waitForRelay,
 };
