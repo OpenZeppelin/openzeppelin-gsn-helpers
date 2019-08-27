@@ -27,7 +27,7 @@ async function downloadRelayer(path=PATH) {
   console.error(`Downloading relayer from ${url}`);
   const response = await axios.get(url, { responseType: 'stream' });
   response.data.pipe(writer);
-  
+
   await new Promise((resolve, reject) => {
     writer.on('finish', resolve);
     writer.on('error', reject);
@@ -38,7 +38,8 @@ async function downloadRelayer(path=PATH) {
 }
 
 function getUrl() {
-  return `https://github.com/${REPOSITORY}/releases/download/${VERSION}/${BINARY}-${getPlatform()}-${getArch()}`
+  const baseUrl = `https://github.com/${REPOSITORY}/releases/download/${VERSION}/${BINARY}-${getPlatform()}-${getArch()}`;
+  return baseUrl + (getPlatform() === 'windows' ? '.exe' : '');
 }
 
 function getPlatform() {
