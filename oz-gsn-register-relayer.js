@@ -16,5 +16,5 @@ const nodeURL = program.ethereumNodeURL !== undefined ? program.ethereumNodeURL 
 const Web3 = require('web3');
 const web3 = new Web3(nodeURL);
 
-const { registerRelay } = require('./src/helpers');
+const { registerRelay } = require('./src/register');
 registerRelay(web3, lodash.pick(program, ['relayUrl', 'relayHubAddress', 'stake', 'unstakeDelay', 'funds', 'from']));

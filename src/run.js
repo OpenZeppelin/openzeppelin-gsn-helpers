@@ -1,7 +1,8 @@
 const { spawn } = require('child_process');
 const { ensureRelayer } = require('./download');
 const { relayHub } = require('./data');
-const { deployRelayHub, registerRelay } = require('./helpers');
+const { deployRelayHub } = require('./helpers');
+const { registerRelay } = require('./register');
 const sleep = require('sleep-promise');
 const tmp = require('tmp');
 const { chunk } = require('lodash');
@@ -22,7 +23,7 @@ async function runRelayer({ detach, workdir, devMode, ethereumNodeURL, gasPriceP
   args.push('-GasPricePercent', gasPricePercent || 0);
   args.push('-Workdir', workingDir);
   if (devMode !== false) args.push('-DevMode');
-  
+
   // Run it!
   console.error(`Starting relayer\n${binPath}\n${chunk(args, 2).map(arr => ' ' + arr.join(' ')).join('\n')}`);
   return spawn(binPath, args, {

@@ -9,36 +9,6 @@ const ether = function(value) {
   return new utils.BN(utils.toWei(value, 'ether'));
 }
 
-async function registerRelay(web3, relayUrl, relayHubAddress, stake, unstakeDelay, funds, from) {
-  try {
-    if (await isRelayReady(relayUrl)) {
-      return;
-    }
-  } catch (error) {
-    throw Error(`Could not reach the relay at ${relayUrl}, is it running?`);
-  }
-
-  try {
-    console.error(`Funding GSN relay at ${relayUrl}`);
-
-    const response = await axios.get(`${relayUrl}/getaddr`);
-    const relayAddress = response.data.RelayServerAddress;
-
-    const relayHub = new web3.eth.Contract(data.relayHub.abi, relayHubAddress);
-
-    await relayHub.methods.stake(relayAddress, unstakeDelay.toString()).send({ value: stake, from });
-
-    await web3.eth.sendTransaction({ from, to: relayAddress, value: funds });
-
-    await waitForRelay(relayUrl);
-
-    console.error(`Relay is funded and ready!`);
-
-  } catch (error) {
-    throw Error(`Failed to fund relay: '${error}'`);
-  }
-}
-
 async function deployRelayHub(web3, from, verbose) {
   if ((await web3.eth.getCode(data.relayHub.address)).length > '0x0'.length) {
     if (verbose) console.error(`RelayHub found at ${data.relayHub.address}`)
@@ -57,13 +27,13 @@ async function deployRelayHub(web3, from, verbose) {
 
 async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
   recipient = getRecipientAddress(recipient)
-  
+
   // Ensure relayHub is deployed on the local network
   if (relayHubAddress.toLowerCase() === data.relayHub.address.toLowerCase()) {
     await deployRelayHub(web3, from);
   }
   const relayHub = getRelayHub(web3, relayHubAddress);
-  
+
   const targetAmount = new web3.utils.BN(amount);
   const currentBalance = new web3.utils.BN(await relayHub.methods.balanceOf(recipient).call());
   if (currentBalance.lt(targetAmount)) {
@@ -79,12 +49,16 @@ async function defaultFromAccount(web3, from = null) {
   if (from) return from;
   const requiredBalance = ether('10');
 
-  const accounts = await web3.eth.getAccounts();
-  for (const account of accounts) {
-    const balance = new web3.utils.BN(await web3.eth.getBalance(account));
-    if (balance.gte(requiredBalance)) {
-      return account;
+  try {
+    const accounts = await web3.eth.getAccounts();
+    for (const account of accounts) {
+      const balance = new web3.utils.BN(await web3.eth.getBalance(account));
+      if (balance.gte(requiredBalance)) {
+        return account;
+      }
     }
+  } catch (error) {
+    throw Error(`Failed to retrieve accounts and balances: ${error}`);
   }
 
   throw Error(`Found no accounts with sufficient balance (${requiredBalance} wei)`);
@@ -135,21 +109,6 @@ async function getRecipientFunds(web3, recipient, relayHubAddress) {
 }
 
 module.exports = {
-  registerRelay: async function (web3, options = {}) {
-    const defaultOptions = {
-      relayUrl: 'http://localhost:8090',
-      relayHubAddress: data.relayHub.address,
-      stake: ether('1'),
-      unstakeDelay: 604800, // 1 week
-      funds: ether('5'),
-      from: await defaultFromAccount(web3, options && options.from),
-    };
-
-    options = merge(defaultOptions, options);
-
-    await registerRelay(web3, options.relayUrl, options.relayHubAddress, options.stake, options.unstakeDelay, options.funds, options.from);
-  },
-
   deployRelayHub: async function (web3, options = {}) {
     const defaultOptions = {
       from: await defaultFromAccount(web3, options && options.from),
@@ -172,9 +131,17 @@ module.exports = {
     return fundRecipient(web3, options.recipient, options.amount, options.from, options.relayHubAddress);
   },
 
+  ether,
+
+  waitForRelay,
+
+  defaultFromAccount,
+
   getRelayHub,
 
   isRelayHubDeployed,
+
+  isRelayReady,
 
   getRecipientFunds
 };
