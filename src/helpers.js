@@ -9,22 +9,6 @@ const ether = function(value) {
   return new utils.BN(utils.toWei(value, 'ether'));
 }
 
-async function deployRelayHub(web3, from, verbose) {
-  if ((await web3.eth.getCode(data.relayHub.address)).length > '0x0'.length) {
-    if (verbose) console.error(`RelayHub found at ${data.relayHub.address}`)
-    return data.relayHub.address;
-  }
-
-  if (verbose) console.error(`Deploying singleton RelayHub instance`);
-  await web3.eth.sendTransaction({ from, to: data.relayHub.deploy.deployer, value: ether(data.relayHub.deploy.fundsEther) });
-
-  await web3.eth.sendSignedTransaction(data.relayHub.deploy.tx);
-
-  if (verbose) console.error(`RelayHub deployed at ${data.relayHub.address}`);
-
-  return data.relayHub.address;
-}
-
 async function fundRecipient(web3, recipient, amount, from, relayHubAddress) {
   recipient = getRecipientAddress(recipient)
 
@@ -109,16 +93,6 @@ async function getRecipientFunds(web3, recipient, relayHubAddress) {
 }
 
 module.exports = {
-  deployRelayHub: async function (web3, options = {}) {
-    const defaultOptions = {
-      from: await defaultFromAccount(web3, options && options.from),
-    };
-
-    options = merge(defaultOptions, options);
-
-    return await deployRelayHub(web3, options.from, !!options.verbose);
-  },
-
   fundRecipient: async function (web3, options = {}) {
     const defaultOptions = {
       amount: ether('1'),

@@ -11,7 +11,7 @@ const nodeURL = program.ethereumNodeURL !== undefined ? program.ethereumNodeURL 
 const Web3 = require('web3');
 const web3 = new Web3(nodeURL);
 
-const { deployRelayHub } = require('./src/helpers');
+const { deployRelayHub } = require('./src/deploy');
 
 const opts = lodash.pick(program, ['from']);
 opts.verbose = true;

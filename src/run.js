@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const { ensureRelayer } = require('./download');
 const { relayHub } = require('./data');
-const { deployRelayHub } = require('./helpers');
+const { deployRelayHub } = require('./deploy');
 const { registerRelay } = require('./register');
 const sleep = require('sleep-promise');
 const tmp = require('tmp');
