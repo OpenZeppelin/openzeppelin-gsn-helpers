@@ -78,7 +78,7 @@ async function downloadFile(url, path) {
 
 async function binaryUncorrupted(path) {
   if (!await pathExists(CHECKSUMS_PATH)) {
-    await downloadFile(`https://github.com/${REPOSITORY}/releases/download/checksums.json`, CHECKSUMS_PATH);
+    await downloadFile(`https://github.com/${REPOSITORY}/releases/download/${VERSION}/checksums.json`, CHECKSUMS_PATH);
   }
 
   const checksums = JSON.parse(readFileSync(CHECKSUMS_PATH));
