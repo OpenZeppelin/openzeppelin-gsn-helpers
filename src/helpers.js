@@ -7,7 +7,7 @@ const { merge } = require('lodash');
 
 const ether = function(value) {
   return new utils.BN(utils.toWei(value, 'ether'));
-}
+};
 
 async function defaultFromAccount(web3, from = null) {
   if (from) return from;
@@ -50,7 +50,7 @@ async function isRelayReady(relayUrl) {
 
 function getRecipientAddress(recipient) {
   if (!recipient) throw new Error('Recipient address not set');
-  if (typeof(recipient) !== 'string') {
+  if (typeof recipient !== 'string') {
     if (recipient.address) return recipient.address;
     else if (recipient.options && recipient.options.address) return recipient.options.address;
   }
@@ -58,7 +58,10 @@ function getRecipientAddress(recipient) {
 }
 
 function getRelayHub(web3, address, options = {}) {
-  return new web3.eth.Contract(data.relayHub.abi, address || data.relayHub.address, { data: data.relayHub.bytecode, ... options });
+  return new web3.eth.Contract(data.relayHub.abi, address || data.relayHub.address, {
+    data: data.relayHub.bytecode,
+    ...options,
+  });
 }
 
 async function isRelayHubDeployed(web3) {

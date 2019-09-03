@@ -1,4 +1,11 @@
-const { registerRelay, deployRelayHub, fundRecipient, getRelayHub, isRelayHubDeployed, getRecipientFunds } = require('./src/helpers');
+const {
+  registerRelay,
+  deployRelayHub,
+  fundRecipient,
+  getRelayHub,
+  isRelayHubDeployed,
+  getRecipientFunds,
+} = require('./src/helpers');
 const { relayHub } = require('./src/data');
 const { runRelayer, runAndRegister } = require('./src/run');
 const { downloadRelayer } = require('./src/download');
@@ -16,5 +23,5 @@ module.exports = {
   runAndRegister,
   downloadRelayer,
   isRelayHubDeployed,
-  getRecipientFunds
+  getRecipientFunds,
 };

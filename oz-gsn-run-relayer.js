@@ -10,13 +10,26 @@ program
   .option('-f, --from <account>', 'account to send transactions from (defaults to first account with balance)')
   .option('--workdir <workdir>', 'working directory for relayer data (defaults to tmp dir)')
   .option('-q, --quiet', 'silence relayer process output')
-  .option('-d, --detach', 'exit process after relayer is ready, and return relayer process pid, but remember to kill it yourself! (implies --quiet)')
+  .option(
+    '-d, --detach',
+    'exit process after relayer is ready, and return relayer process pid, but remember to kill it yourself! (implies --quiet)',
+  )
   .option('--no-register', 'skip registration of the relayer process')
   .option('--no-devMode', 'turns off dev mode in relayer')
   .parse(process.argv);
 
 const { runRelayer, runAndRegister } = require('./src/run');
-const opts = lodash.pick(program, ['detach', 'workdir', 'ethereumNodeURL', 'relayUrl', 'port', 'relayHubAddress', 'from', 'devMode', 'quiet']);
+const opts = lodash.pick(program, [
+  'detach',
+  'workdir',
+  'ethereumNodeURL',
+  'relayUrl',
+  'port',
+  'relayHubAddress',
+  'from',
+  'devMode',
+  'quiet',
+]);
 if (opts.port && opts.relayUrl) {
   console.error(`Cannot set both port and relayUrl options. Please set only one.`);
   process.exit(1);
@@ -30,7 +43,8 @@ if (program.register === false) {
 const Web3 = require('web3');
 const web3 = new Web3(program.ethereumNodeURL);
 
-web3.eth.getAccounts()
+web3.eth
+  .getAccounts()
   .then(async () => {
     const subprocess = await runAndRegister(web3, opts);
     if (program.detach) {

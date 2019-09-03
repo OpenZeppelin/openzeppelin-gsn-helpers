@@ -3,7 +3,7 @@ const { defaultFromAccount, ether, isRelayReady, waitForRelay } = require('./hel
 const { merge } = require('lodash');
 const axios = require('axios');
 
-async function registerRelay (web3, options = {}) {
+async function registerRelay(web3, options = {}) {
   const defaultOptions = {
     relayUrl: 'http://localhost:8090',
     relayHubAddress: data.relayHub.address,
@@ -31,15 +31,19 @@ async function registerRelay (web3, options = {}) {
 
     const relayHub = new web3.eth.Contract(data.relayHub.abi, options.relayHubAddress);
 
-    await relayHub.methods.stake(relayAddress, options.unstakeDelay.toString())
+    await relayHub.methods
+      .stake(relayAddress, options.unstakeDelay.toString())
       .send({ value: options.stake, from: options.from });
 
-    await web3.eth.sendTransaction({ from: options.from, to: relayAddress, value: options.funds });
+    await web3.eth.sendTransaction({
+      from: options.from,
+      to: relayAddress,
+      value: options.funds,
+    });
 
     await waitForRelay(options.relayUrl);
 
     console.error(`Relay is funded and ready!`);
-
   } catch (error) {
     throw Error(`Failed to fund relay: '${error}'`);
   }

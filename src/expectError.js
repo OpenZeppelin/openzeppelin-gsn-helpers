@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const expectError = async function (promise) {
+const expectError = async function(promise) {
   try {
     await promise;
   } catch (error) {

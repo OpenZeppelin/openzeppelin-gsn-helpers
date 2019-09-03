@@ -7,12 +7,12 @@ async function fundRecipient(web3, options = {}) {
   const defaultOptions = {
     amount: ether('1'),
     from: await defaultFromAccount(web3, options && options.from),
-    relayHubAddress: data.relayHub.address
+    relayHubAddress: data.relayHub.address,
   };
 
   options = merge(defaultOptions, options);
 
-  options.recipient = getRecipientAddress(options.recipient)
+  options.recipient = getRecipientAddress(options.recipient);
 
   // Ensure relayHub is deployed on the local network
   if (options.relayHubAddress.toLowerCase() === data.relayHub.address.toLowerCase()) {

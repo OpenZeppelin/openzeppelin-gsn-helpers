@@ -7,7 +7,17 @@ const sleep = require('sleep-promise');
 const tmp = require('tmp');
 const { chunk } = require('lodash');
 
-async function runRelayer({ detach, workdir, devMode, ethereumNodeURL, gasPricePercent, port, relayUrl, relayHubAddress, quiet }) {
+async function runRelayer({
+  detach,
+  workdir,
+  devMode,
+  ethereumNodeURL,
+  gasPricePercent,
+  port,
+  relayUrl,
+  relayHubAddress,
+  quiet,
+}) {
   // Download relayer if needed
   const binPath = await ensureRelayer();
 
@@ -25,14 +35,18 @@ async function runRelayer({ detach, workdir, devMode, ethereumNodeURL, gasPriceP
   if (devMode !== false) args.push('-DevMode');
 
   // Run it!
-  console.error(`Starting relayer\n${binPath}\n${chunk(args, 2).map(arr => ' ' + arr.join(' ')).join('\n')}`);
+  console.error(
+    `Starting relayer\n${binPath}\n${chunk(args, 2)
+      .map(arr => ' ' + arr.join(' '))
+      .join('\n')}`,
+  );
   return spawn(binPath, args, {
-    stdio: (quiet || detach) ? 'ignore' : 'inherit',
-    detached: !!detach
+    stdio: quiet || detach ? 'ignore' : 'inherit',
+    detached: !!detach,
   });
 }
 
-async function runAndRegister(web3, opts={}) {
+async function runAndRegister(web3, opts = {}) {
   const { from } = opts;
   let { relayHubAddress } = opts;
 
@@ -45,7 +59,11 @@ async function runAndRegister(web3, opts={}) {
   const subprocess = await runRelayer({ ...opts, relayHubAddress });
   await sleep(2000);
   try {
-    await registerRelay(web3, { relayHubAddress, from, relayUrl: getUrl(opts) });
+    await registerRelay(web3, {
+      relayHubAddress,
+      from,
+      relayUrl: getUrl(opts),
+    });
   } catch (err) {
     subprocess.kill();
     throw err;
@@ -73,5 +91,5 @@ function getPort({ relayUrl, port }) {
 
 module.exports = {
   runRelayer,
-  runAndRegister
-}
+  runAndRegister,
+};
