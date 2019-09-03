@@ -1,4 +1,4 @@
-const { expect } = require("chai");
+const { expect } = require('chai');
 
 const expectError = async function(promise) {
   try {
@@ -7,7 +7,7 @@ const expectError = async function(promise) {
     return;
   }
 
-  expect.fail("Expected a GSN exception but none was received");
+  expect.fail('Expected a GSN exception but none was received');
 };
 
 module.exports = expectError;

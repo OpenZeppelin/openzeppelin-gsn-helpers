@@ -1,21 +1,16 @@
-const data = require("./data");
-const {
-  defaultFromAccount,
-  ether,
-  isRelayReady,
-  waitForRelay
-} = require("./helpers");
-const { merge } = require("lodash");
-const axios = require("axios");
+const data = require('./data');
+const { defaultFromAccount, ether, isRelayReady, waitForRelay } = require('./helpers');
+const { merge } = require('lodash');
+const axios = require('axios');
 
 async function registerRelay(web3, options = {}) {
   const defaultOptions = {
-    relayUrl: "http://localhost:8090",
+    relayUrl: 'http://localhost:8090',
     relayHubAddress: data.relayHub.address,
-    stake: ether("1"),
+    stake: ether('1'),
     unstakeDelay: 604800, // 1 week
-    funds: ether("5"),
-    from: await defaultFromAccount(web3, options && options.from)
+    funds: ether('5'),
+    from: await defaultFromAccount(web3, options && options.from),
   };
 
   options = merge(defaultOptions, options);
@@ -25,9 +20,7 @@ async function registerRelay(web3, options = {}) {
       return;
     }
   } catch (error) {
-    throw Error(
-      `Could not reach the relay at ${options.relayUrl}, is it running?`
-    );
+    throw Error(`Could not reach the relay at ${options.relayUrl}, is it running?`);
   }
 
   try {
@@ -36,10 +29,7 @@ async function registerRelay(web3, options = {}) {
     const response = await axios.get(`${options.relayUrl}/getaddr`);
     const relayAddress = response.data.RelayServerAddress;
 
-    const relayHub = new web3.eth.Contract(
-      data.relayHub.abi,
-      options.relayHubAddress
-    );
+    const relayHub = new web3.eth.Contract(data.relayHub.abi, options.relayHubAddress);
 
     await relayHub.methods
       .stake(relayAddress, options.unstakeDelay.toString())
@@ -48,7 +38,7 @@ async function registerRelay(web3, options = {}) {
     await web3.eth.sendTransaction({
       from: options.from,
       to: relayAddress,
-      value: options.funds
+      value: options.funds,
     });
 
     await waitForRelay(options.relayUrl);
@@ -60,5 +50,5 @@ async function registerRelay(web3, options = {}) {
 }
 
 module.exports = {
-  registerRelay
+  registerRelay,
 };

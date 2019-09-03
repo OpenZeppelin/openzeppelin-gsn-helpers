@@ -1,17 +1,17 @@
-const data = require("./data");
+const data = require('./data');
 
-const axios = require("axios");
-const sleep = require("sleep-promise");
-const utils = require("web3").utils;
-const { merge } = require("lodash");
+const axios = require('axios');
+const sleep = require('sleep-promise');
+const utils = require('web3').utils;
+const { merge } = require('lodash');
 
 const ether = function(value) {
-  return new utils.BN(utils.toWei(value, "ether"));
+  return new utils.BN(utils.toWei(value, 'ether'));
 };
 
 async function defaultFromAccount(web3, from = null) {
   if (from) return from;
-  const requiredBalance = ether("10");
+  const requiredBalance = ether('10');
 
   try {
     const accounts = await web3.eth.getAccounts();
@@ -25,9 +25,7 @@ async function defaultFromAccount(web3, from = null) {
     throw Error(`Failed to retrieve accounts and balances: ${error}`);
   }
 
-  throw Error(
-    `Found no accounts with sufficient balance (${requiredBalance} wei)`
-  );
+  throw Error(`Found no accounts with sufficient balance (${requiredBalance} wei)`);
 }
 
 async function waitForRelay(relayUrl) {
@@ -51,21 +49,19 @@ async function isRelayReady(relayUrl) {
 }
 
 function getRecipientAddress(recipient) {
-  if (!recipient) throw new Error("Recipient address not set");
-  if (typeof recipient !== "string") {
+  if (!recipient) throw new Error('Recipient address not set');
+  if (typeof recipient !== 'string') {
     if (recipient.address) return recipient.address;
-    else if (recipient.options && recipient.options.address)
-      return recipient.options.address;
+    else if (recipient.options && recipient.options.address) return recipient.options.address;
   }
   return recipient;
 }
 
 function getRelayHub(web3, address, options = {}) {
-  return new web3.eth.Contract(
-    data.relayHub.abi,
-    address || data.relayHub.address,
-    { data: data.relayHub.bytecode, ...options }
-  );
+  return new web3.eth.Contract(data.relayHub.abi, address || data.relayHub.address, {
+    data: data.relayHub.bytecode,
+    ...options,
+  });
 }
 
 async function isRelayHubDeployed(web3) {
@@ -87,5 +83,5 @@ module.exports = {
   getRelayHub,
   isRelayHubDeployed,
   isRelayReady,
-  waitForRelay
+  waitForRelay,
 };
