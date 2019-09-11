@@ -8,4 +8,5 @@ program
   .command('deploy-relay-hub', 'deploy the singleton RelayHub instance')
   .command('register-relayer', 'stake for a relayer and fund it')
   .command('fund-recipient', 'fund a recipient contract so that it can receive relayed calls')
+  .command('balance', 'query a recipient or relayer owner GSN balance')
   .parse(process.argv);
