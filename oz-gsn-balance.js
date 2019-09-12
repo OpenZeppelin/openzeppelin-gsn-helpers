@@ -12,6 +12,7 @@ const Web3 = require('web3');
 const web3 = new Web3(nodeURL);
 
 const { balance } = require('./src/balance');
+const { fromWei } = require('./src/helpers');
 balance(web3, lodash.pick(program, ['recipient'])).then(balance =>
-  console.error(`Account ${program.recipient} has a GSN balance of ${balance.toString()} wei`),
+  console.error(`Account ${program.recipient} has a GSN balance of ${fromWei(balance)} ETH`),
 );

@@ -9,6 +9,10 @@ const ether = function(value) {
   return new utils.BN(utils.toWei(value, 'ether'));
 };
 
+const fromWei = function(wei) {
+  return utils.fromWei(wei, 'ether');
+};
+
 async function defaultFromAccount(web3, from = null) {
   if (from) return from;
   const requiredBalance = ether('10');
@@ -78,6 +82,7 @@ async function getRecipientFunds(web3, recipient, relayHubAddress) {
 module.exports = {
   defaultFromAccount,
   ether,
+  fromWei,
   getRecipientAddress,
   getRecipientFunds,
   getRelayHub,
