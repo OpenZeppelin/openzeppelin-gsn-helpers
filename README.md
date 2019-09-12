@@ -15,6 +15,8 @@ This suite has helper methods and command line scripts to:
 - Deploy a new relay hub
 - Register a relayer in the hub
 - Fund a recipient contract in the hub
+- Query a recipient contract or relayer owner's balance in the hub
+- Withdraw a relayer's owner revenue from the hub
 
 ## Running the relayer binary
 
@@ -27,7 +29,7 @@ RelayHub deployed at 0xd216153c06e857cd7f72665e0af1d7d82172f494
 Downloading relayer from https://github.com/OpenZeppelin/openzeppelin-gsn-helpers/releases/download/v0.1.4/gsn-relay-linux-amd64
 Relayer downloaded to ~/.gsn/gsn-relay-v0.1.4
 Starting relayer
-~/.gsn/gsn-relay-v0.1.4  
+~/.gsn/gsn-relay-v0.1.4
  -EthereumNodeUrl http://localhost:8545
  -RelayHubAddress 0xd216153c06e857cd7f72665e0af1d7d82172f494
  -Port 8090
@@ -47,7 +49,7 @@ You can pass in the `--detach` option if you want to the process to exit after t
 Import the relevant scripts from the gsn-helpers package, and provide a valid `web3.js` instance to use them. All options are optional unless noted, and default to the values listed here.
 
 ```js
-const { registerRelay, deployRelayHub, fundRecipient } = require('@openzeppelin/gsn-helpers');
+const { registerRelay, deployRelayHub, fundRecipient, balance, withdraw } = require('@openzeppelin/gsn-helpers');
 const web3 = new Web3(...);
 
 // Deploy a relay hub instance
@@ -69,7 +71,7 @@ await runRelayer({
 // Register a relayer in the hub, requires the relayer process to be running
 await registerRelay(web3, {
   relayUrl: 'http://localhost:8090',
-  stake: ether('1'), 
+  stake: ether('1'),
   unstakeDelay: 604800, // 1 week
   funds: ether('5'),
   from: accounts[0]
@@ -80,6 +82,18 @@ await fundRecipient(web3, {
   recipient: RECIPIENT_ADDRESS, // required
   amount: ether('1'),
   from: accounts[0]
+});
+
+// Query a recipient's or owner's GSN balance
+await balance(web3, {
+  recipient: RECIPIENT_ADDRESS, // required
+});
+
+// Withdraw a relayer owner's GSN balance
+await withdraw(web3, {
+  from: OWNER_ADDRESS, // required
+  to: OWNER_ADDRESS,
+  amount: await balance(web3, { recipient: from })
 });
 ```
 
@@ -136,7 +150,7 @@ beforeEach('setup', async function () {
 
   // Register the recipient in the hub
   await fundRecipient(this.web3, { recipient: this.recipient.options.address });
-  
+
   // Create gsn provider and plug it into the recipient
   const gsnProvider = new GSNProvider(PROVIDER_URL);
   this.recipient.setProvider(gsnProvider);

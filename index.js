@@ -1,27 +1,26 @@
-const {
-  registerRelay,
-  deployRelayHub,
-  fundRecipient,
-  getRelayHub,
-  isRelayHubDeployed,
-  getRecipientFunds,
-} = require('./src/helpers');
+const { getRelayHub, isRelayHubDeployed } = require('./src/helpers');
+const _ = require('lodash');
+const expectError = require('./src/expectError');
+const { balance } = require('./src/balance');
+const { deployRelayHub } = require('./src/deploy');
+const { downloadRelayer } = require('./src/download');
+const { fundRecipient } = require('./src/fund');
+const { registerRelay } = require('./src/register');
 const { relayHub } = require('./src/data');
 const { runRelayer, runAndRegister } = require('./src/run');
-const { downloadRelayer } = require('./src/download');
-const expectError = require('./src/expectError');
-const _ = require('lodash');
+const { withdraw } = require('./src/withdraw');
 
 module.exports = {
-  registerRelay,
+  balance,
   deployRelayHub,
+  downloadRelayer,
+  expectError,
   fundRecipient,
   getRelayHub,
-  expectError,
-  relayHub: _.pick(relayHub, ['abi', 'address', 'bytecode']),
-  runRelayer,
-  runAndRegister,
-  downloadRelayer,
   isRelayHubDeployed,
-  getRecipientFunds,
+  registerRelay,
+  relayHub: _.pick(relayHub, ['abi', 'address', 'bytecode']),
+  runAndRegister,
+  runRelayer,
+  withdraw,
 };
