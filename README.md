@@ -1,5 +1,7 @@
 # OpenZeppelin GSN Helpers
 
+[![npm (scoped)](https://img.shields.io/npm/v/@openzeppelin/gsn-helpers)](https://www.npmjs.com/package/@openzeppelin/gsn-helpers)
+
 **Test and development helper methods and scripts for using the Gas Station Network.** Provides methods for quickly running a relayer, deploying a relay hub, funding a recipient, or registering a relayer (the last based on [fundrelay.js](https://github.com/tabookey/tabookey-gasless/blob/master/scripts/fundrelay.js) from `tabookey-gasless`).
 
 ## Install
