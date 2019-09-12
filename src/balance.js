@@ -1,5 +1,4 @@
 const { getRecipientAddress, getRelayHub } = require('./helpers');
-const { merge } = require('lodash');
 
 async function balance(web3, options = {}) {
   options.recipient = getRecipientAddress(options.recipient);
