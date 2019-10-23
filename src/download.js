@@ -7,7 +7,7 @@ const axios = require('axios');
 const { sha3 } = require('web3-utils');
 
 const REPOSITORY = 'OpenZeppelin/openzeppelin-gsn-helpers';
-const VERSION = 'v0.1.4';
+const VERSION = 'v0.2.1';
 const BINARY = 'gsn-relay';
 const BINARY_PATH = `${envPaths('gsn').cache}/${BINARY}-${VERSION}`;
 const CHECKSUMS_PATH = `${envPaths('gsn').cache}/checksums.json`;
