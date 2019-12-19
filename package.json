@@ -7,9 +7,11 @@
     "oz-gsn": "oz-gsn.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "oz-docs",
+    "docs:watch": "npm run docs watch",
+    "pre-commit": "lint-staged",
     "release": "./scripts/release.sh",
-    "pre-commit": "lint-staged"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "lint-staged": {
     "*.js": [
@@ -49,6 +51,7 @@
   "devDependencies": {
     "husky": "^3.0.5",
     "lint-staged": "^9.2.5",
+    "openzeppelin-docs-utils": "github:OpenZeppelin/docs-utils",
     "prettier": "^1.18.2"
   }
 }
