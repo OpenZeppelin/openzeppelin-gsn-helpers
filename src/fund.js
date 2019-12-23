@@ -16,7 +16,7 @@ async function fundRecipient(web3, options = {}) {
 
   // Ensure relayHub is deployed on the local network
   if (options.relayHubAddress.toLowerCase() === data.relayHub.address.toLowerCase()) {
-    await deployRelayHub(web3, options.from);
+    await deployRelayHub(web3, options);
   }
   const relayHub = getRelayHub(web3, options.relayHubAddress);
 
