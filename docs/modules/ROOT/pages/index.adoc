@@ -14,7 +14,7 @@ Provides methods for:
 
 === Installation
 
-```bash
+```console
 $ npm install @openzeppelin/gsn-helpers
 ```
 
@@ -26,7 +26,7 @@ The following samples show how to use each to deploy the `RelayHub` contract, fu
 
 ==== Using the CLI
 
-```bash
+```console
 $ npx oz-gsn deploy-relay-hub --ethereumNodeURL http://localhost:8545
 Deploying singleton RelayHub instance
 RelayHub deployed at 0xd216153c06e857cd7f72665e0af1d7d82172f494

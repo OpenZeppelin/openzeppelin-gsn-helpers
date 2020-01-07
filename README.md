@@ -1,6 +1,6 @@
-= OpenZeppelin GSN Helpers
+# OpenZeppelin GSN Helpers
 
-https://www.npmjs.com/package/@openzeppelin/gsn-helpers[image:https://img.shields.io/npm/v/@openzeppelin/gsn-helpers[NPM]]
+[![NPM Package](https://img.shields.io/npm/v/@openzeppelin/gsn-helpers.svg)](https://www.npmjs.org/package/@openzeppelin/gsn-helpers)
 
 **Helper functions and scripts for using the Gas Station Network**. Develop and test your GSN application with minimal setup.
 
@@ -12,23 +12,23 @@ Provides methods for:
  * Running and registering a relayer
  * Withdrawing a relayer's revenue
 
-== Overview
+## Overview
 
-=== Installation
+### Installation
 
-```bash
+```console
 $ npm install @openzeppelin/gsn-helpers
 ```
 
-=== Usage
+### Usage
 
 The GSN Helpers come in two flavors: a command-line interface and a JavaScript library, providing high flexibility.
 
 The following samples show how to use each to deploy the `RelayHub` contract, fund a recipient and then start a relayer server.
 
-==== Using the CLI
+#### Using the CLI
 
-```bash
+```console
 $ npx oz-gsn deploy-relay-hub --ethereumNodeURL http://localhost:8545
 Deploying singleton RelayHub instance
 RelayHub deployed at 0xd216153c06e857cd7f72665e0af1d7d82172f494
@@ -46,7 +46,7 @@ Starting relayer
 Relay is funded and ready!
 ```
 
-==== Using the JavaScript library
+#### Using the JavaScript library
 
 ```javascript
 const {
@@ -64,13 +64,13 @@ await runRelayer(web3, { quiet: true });
 await fundRecipient(web3, { recipient: <address>, amount: 50000000 });
 ```
 
-NOTE: All of these actions require a https://github.com/trufflesuite/ganache-cli/[local blockchain] to be running in the background on port 8545.
+NOTE: All of these actions require a [local blockchain](https://github.com/trufflesuite/ganache-cli/) to be running in the background on port 8545.
 
-== Learn More
+## Learn More
 
- * Head to link:docs/modules/ROOT/pages/preparing-a-testing-environment.adoc[Preparing a Testing Environment] to quickstart your project with ready-to-use GSN setup scripts.
- * For detailed usage information, take a look at the link:docs/modules/ROOT/pages/api.adoc[API Reference].
+ * Head to [Preparing a Testing Environment](docs/modules/ROOT/pages/preparing-a-testing-environment.adoc) to quickstart your project with ready-to-use GSN setup scripts.
+ * For detailed usage information, take a look at the [API Reference](docs/modules/ROOT/pages/api.adoc).
 
-== License
+## License
 
 The MIT License.

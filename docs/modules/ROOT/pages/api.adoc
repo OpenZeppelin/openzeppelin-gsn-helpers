@@ -13,13 +13,13 @@ The following commands are available via the CLI:
 
 To use a command, run:
 
-```bash
+```console
 $ npx oz-gsn <command> <options>
 ```
 
 For example:
 
-```bash
+```console
 $ npx oz-gsn deploy-relay-hub --ethereumNodeURL http://localhost:8545
 Deploying singleton RelayHub instance
 RelayHub deployed at 0xd216153c06e857cd7f72665e0af1d7d82172f494
@@ -27,7 +27,7 @@ RelayHub deployed at 0xd216153c06e857cd7f72665e0af1d7d82172f494
 
 To learn about a command's options and usage, run:
 
-```bash
+```console
 $ npx oz-gsn <command> --help
 ```
 

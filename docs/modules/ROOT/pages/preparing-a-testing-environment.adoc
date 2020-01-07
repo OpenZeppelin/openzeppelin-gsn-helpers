@@ -10,7 +10,7 @@ It is not uncommon for projects to have a `test.sh` file that performs some init
 
 The following script will deploy `RelayHub`, download the relayer binary, run a relayer server and register on the hub:
 
-```bash
+```console
 // Perform necessary cleanup on exit
 trap cleanup EXIT
 
@@ -30,7 +30,7 @@ setup_gsn_relay() {
 
 If you want to have more fine-grained control over the setup process, you can use the following setup:
 
-```bash
+```console
 ganache_url="http://localhost:8545"
 relayer_port=8099
 relayer_url="http://localhost:${relayer_port}"
