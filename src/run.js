@@ -36,7 +36,7 @@ async function runRelayer({
 
   // Note: 70 is the default value
   // Refs: https://github.com/tabookey/tabookey-gasless/blob/v0.4.1/server/src/relay/RelayHttpServer.go#L175
-  args.push('-Fee', fee || 70);
+  args.push('-Fee', fee === undefined ? 70 : fee);
   if (devMode !== false) args.push('-DevMode');
 
   // Run it!
