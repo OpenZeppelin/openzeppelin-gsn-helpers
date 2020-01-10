@@ -17,6 +17,7 @@ async function runRelayer({
   relayUrl,
   relayHubAddress,
   quiet,
+  fee,
 }) {
   // Download relayer if needed
   const binPath = await ensureRelayer();
@@ -32,6 +33,10 @@ async function runRelayer({
   args.push('-Url', getUrl({ relayUrl, port }));
   args.push('-GasPricePercent', gasPricePercent || 0);
   args.push('-Workdir', workingDir);
+
+  // Note: 70 is the default value
+  // Refs: https://github.com/tabookey/tabookey-gasless/blob/v0.4.1/server/src/relay/RelayHttpServer.go#L175
+  args.push('-Fee', fee || 70);
   if (devMode !== false) args.push('-DevMode');
 
   // Run it!
