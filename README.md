@@ -68,8 +68,8 @@ NOTE: All of these actions require a [local blockchain](https://github.com/truff
 
 ## Learn More
 
- * Head to [Preparing a Testing Environment](docs/modules/ROOT/pages/preparing-a-testing-environment.adoc) to quickstart your project with ready-to-use GSN setup scripts.
- * For detailed usage information, take a look at the [API Reference](docs/modules/ROOT/pages/api.adoc).
+ * Head to [Preparing a Testing Environment](https://docs.openzeppelin.com/gsn-helpers/preparing-a-testing-environment) to quickstart your project with ready-to-use GSN setup scripts.
+ * For detailed usage information, take a look at the [API Reference](https://docs.openzeppelin.com/gsn-helpers/api).
 
 ## License
 

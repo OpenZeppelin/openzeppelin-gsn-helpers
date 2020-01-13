@@ -57,7 +57,7 @@ setup_gsn_relay() {
 
 == Interacting with the GSN
 
-Once the GSN setup is complete, before your test cases are executed you will need to set up an https://github.com/OpenZeppelin/openzeppelin-gsn-provider[OpenZeppelin GSN Provider] and register any recipients:
+Once the GSN setup is complete, before your test cases are executed you will need to set up an xref:gsn-provider::index.adoc[*OpenZeppelin GSN Provider*] and register any recipients:
 
 ```javascript
 beforeEach(async function () {
