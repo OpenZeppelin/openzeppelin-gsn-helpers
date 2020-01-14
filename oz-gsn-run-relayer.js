@@ -16,6 +16,7 @@ program
   )
   .option('--no-register', 'skip registration of the relayer process')
   .option('--no-devMode', 'turns off dev mode in relayer')
+  .option('--fee <percentage>', "relayer's transaction fee (defaults to 70)")
   .parse(process.argv);
 
 const { runRelayer, runAndRegister } = require('./src/run');
@@ -29,6 +30,7 @@ const opts = lodash.pick(program, [
   'from',
   'devMode',
   'quiet',
+  'fee',
 ]);
 if (opts.port && opts.relayUrl) {
   console.error(`Cannot set both port and relayUrl options. Please set only one.`);

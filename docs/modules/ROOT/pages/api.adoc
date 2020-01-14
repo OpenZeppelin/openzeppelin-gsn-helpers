@@ -58,6 +58,7 @@ async function runRelayer(web3, {
   gasPricePercent: 0,
   port: 8090,
   quiet: true,
+  fee: 70 // fee (%) that the relay takes over actual gas cost
 });
 ```
 
