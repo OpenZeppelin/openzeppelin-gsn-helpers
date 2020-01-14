@@ -16,7 +16,7 @@ program
   )
   .option('--no-register', 'skip registration of the relayer process')
   .option('--no-devMode', 'turns off dev mode in relayer')
-  .option('--fee', "relay's per transaction fee")
+  .option('--fee <percentage>', "relayer's transaction fee (defaults to 70)")
   .parse(process.argv);
 
 const { runRelayer, runAndRegister } = require('./src/run');
